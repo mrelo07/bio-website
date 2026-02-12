@@ -41,7 +41,7 @@ export default function Home() {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 0%, hsla(185, 80%, 55%, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, hsla(220, 60%, 30%, 0.06) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, hsla(185, 80%, 55%, 0.04) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 50% 0%, hsla(270, 70%, 65%, 0.1) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, hsla(290, 50%, 40%, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, hsla(270, 70%, 65%, 0.05) 0%, transparent 50%)",
         }}
       />
 

@@ -56,7 +56,7 @@ export function ParticlesBackground() {
 
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `hsla(185, 80%, 55%, ${p.opacity})`
+        ctx.fillStyle = `hsla(270, 70%, 65%, ${p.opacity})`
         ctx.fill()
 
         for (let j = i + 1; j < particles.length; j++) {
@@ -68,7 +68,7 @@ export function ParticlesBackground() {
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)
             ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `hsla(185, 80%, 55%, ${0.08 * (1 - dist / 120)})`
+            ctx.strokeStyle = `hsla(270, 70%, 65%, ${0.08 * (1 - dist / 120)})`
             ctx.lineWidth = 0.5
             ctx.stroke()
           }

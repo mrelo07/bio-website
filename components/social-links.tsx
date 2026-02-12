@@ -51,9 +51,9 @@ export function SocialLinks({ links }: SocialLinksProps) {
           variants={item}
           whileHover={{ scale: 1.02, y: -2 }}
           whileTap={{ scale: 0.98 }}
-          className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-border bg-card/60 px-5 py-3.5 backdrop-blur-md transition-all duration-300 hover:border-neon/40 hover:bg-secondary/80 hover:shadow-[0_0_20px_hsla(185,80%,55%,0.12)]"
+          className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-border bg-card/60 px-5 py-3.5 backdrop-blur-md transition-all duration-300 hover:border-neon/40 hover:bg-secondary/80 hover:shadow-[0_0_20px_hsla(270,70%,65%,0.12)]"
         >
-          <span className="absolute inset-0 -translate-x-full bg-[linear-gradient(90deg,transparent,hsla(185,80%,55%,0.05),transparent)] transition-transform duration-700 group-hover:translate-x-full" />
+          <span className="absolute inset-0 -translate-x-full bg-[linear-gradient(90deg,transparent,hsla(270,70%,65%,0.05),transparent)] transition-transform duration-700 group-hover:translate-x-full" />
           <span className="relative z-10 flex h-9 w-9 items-center justify-center rounded-lg bg-secondary text-foreground transition-colors duration-300 group-hover:bg-neon/10 group-hover:text-neon">
             {link.icon}
           </span>

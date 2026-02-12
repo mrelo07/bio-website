@@ -57,7 +57,7 @@ export function ProfileCard({
         whileHover={{ scale: 1.05 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-neon/30 shadow-[0_0_20px_hsla(185,80%,55%,0.3)]">
+        <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-neon/30 shadow-[0_0_20px_hsla(270,70%,65%,0.3)]">
           <Image
             src={avatarSrc}
             alt={`${displayName}'s avatar`}
@@ -67,7 +67,7 @@ export function ProfileCard({
           />
         </div>
         <span
-          className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-card ${statusColors[status]} shadow-[0_0_8px_hsla(185,80%,55%,0.4)]`}
+          className={`absolute bottom-1 right-1 h-5 w-5 rounded-full border-[3px] border-card ${statusColors[status]} shadow-[0_0_8px_hsla(270,70%,65%,0.4)]`}
           title={statusLabels[status]}
           aria-label={`Status: ${statusLabels[status]}`}
         />
@@ -107,7 +107,7 @@ export function ProfileCard({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
             onClick={handleCopy}
-            className="mt-2 flex items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-1.5 text-xs text-muted-foreground transition-all hover:border-neon/40 hover:text-foreground hover:shadow-[0_0_12px_hsla(185,80%,55%,0.15)]"
+            className="mt-2 flex items-center gap-2 rounded-lg border border-border bg-secondary/50 px-3 py-1.5 text-xs text-muted-foreground transition-all hover:border-neon/40 hover:text-foreground hover:shadow-[0_0_12px_hsla(270,70%,65%,0.15)]"
             aria-label={`Copy Discord tag: ${discordTag}`}
           >
             <svg

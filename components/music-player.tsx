@@ -39,7 +39,7 @@ export function MusicPlayer() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1.2, duration: 0.4 }}
       onClick={toggleMusic}
-      className="group flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 backdrop-blur-md transition-all hover:border-neon/40 hover:shadow-[0_0_12px_hsla(185,80%,55%,0.15)]"
+      className="group flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 backdrop-blur-md transition-all hover:border-neon/40 hover:shadow-[0_0_12px_hsla(270,70%,65%,0.15)]"
       aria-label={isPlaying ? "Mute music" : "Play music"}
     >
       {isPlaying ? (
