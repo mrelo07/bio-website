@@ -4,7 +4,7 @@ import { ParticlesBackground } from "@/components/particles-background"
 import { ProfileCard } from "@/components/profile-card"
 import { SocialLinks } from "@/components/social-links"
 import { MusicPlayer } from "@/components/music-player"
-import { StatsSection } from "@/components/stats-section"
+
 import {
   Github,
   Gamepad2,
@@ -57,14 +57,11 @@ export default function Home() {
         <ProfileCard
           username="mrelo07"
           displayName="mrelo07"
-          bio="Building cool things on the internet and exploring the digital frontier."
+          bio="cfxmafia❤️"
           avatarSrc="/avatar.jpg"
           discordTag="mr_elo_07"
           status="online"
         />
-
-        {/* Stats */}
-        <StatsSection />
 
         {/* Social links */}
         <SocialLinks links={socialLinks} />
