@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Volume2, VolumeX } from "lucide-react"
 import { useState, useRef, useCallback, useEffect } from "react"
 
@@ -8,6 +8,7 @@ const YOUTUBE_VIDEO_ID = "fjGG9-4pYU0"
 
 export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [showEntryOverlay, setShowEntryOverlay] = useState(true)
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const playerReady = useRef(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -17,7 +18,7 @@ export function MusicPlayer() {
 
     const iframe = document.createElement("iframe")
     iframe.src = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&autoplay=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}&controls=0&showinfo=0&modestbranding=1&origin=${window.location.origin}`
-    iframe.allow = "autoplay"
+    iframe.allow = "autoplay; encrypted-media"
     iframe.style.position = "absolute"
     iframe.style.width = "1px"
     iframe.style.height = "1px"
@@ -33,10 +34,23 @@ export function MusicPlayer() {
     iframeRef.current = iframe
   }, [])
 
-  useEffect(() => {
+  const handleEntryClick = () => {
+    setShowEntryOverlay(false)
     createPlayer()
     setIsPlaying(true)
-  }, [createPlayer])
+  }
+
+  // Listen for any keypress on the overlay too
+  useEffect(() => {
+    if (!showEntryOverlay) return
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        handleEntryClick()
+      }
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [showEntryOverlay])
 
   const postMessage = useCallback((action: string) => {
     if (iframeRef.current && playerReady.current) {
@@ -64,6 +78,40 @@ export function MusicPlayer() {
 
   return (
     <>
+      {/* Entry overlay - requires one click to satisfy browser autoplay policy */}
+      <AnimatePresence>
+        {showEntryOverlay && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-50 flex cursor-pointer flex-col items-center justify-center bg-background/95 backdrop-blur-sm"
+            onClick={handleEntryClick}
+            role="button"
+            tabIndex={0}
+            aria-label="Click to enter site"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex flex-col items-center gap-4"
+            >
+              <div className="h-16 w-16 rounded-full border border-neon/30 bg-card/60 p-4 shadow-[0_0_30px_hsla(270,70%,65%,0.2)]">
+                <Volume2 className="h-full w-full text-neon" />
+              </div>
+              <p className="text-sm text-muted-foreground">Click anywhere to enter</p>
+              <motion.div
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="mt-2 h-1 w-12 rounded-full bg-neon/30"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div ref={containerRef} className="fixed" aria-hidden="true" />
       <motion.button
         initial={{ opacity: 0, scale: 0.8 }}
