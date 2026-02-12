@@ -27,7 +27,7 @@ const socialLinks = [
   },
   {
     label: "Steam",
-    url: "https://steamcommunity.com/id/mrelo07",
+    url: "https://steamcommunity.com/profiles/76561198756156419",
     icon: <Gamepad2 className="h-5 w-5" />,
   },
 ]
