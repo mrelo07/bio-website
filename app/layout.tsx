@@ -7,8 +7,8 @@ const _inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 const _jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-jetbrains' })
 
 export const metadata: Metadata = {
-  title: 'YourName | Links',
-  description: 'All my links in one place. Connect with me across the internet.',
+  title: 'mrelo07 | Links',
+  description: 'All my links in one place. Connect with mrelo07 across the internet.',
 }
 
 export const viewport: Viewport = {
