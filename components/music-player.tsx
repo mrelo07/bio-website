@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Volume2, VolumeX } from "lucide-react"
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 
 const YOUTUBE_VIDEO_ID = "fjGG9-4pYU0"
 
@@ -32,6 +32,11 @@ export function MusicPlayer() {
     containerRef.current?.appendChild(iframe)
     iframeRef.current = iframe
   }, [])
+
+  useEffect(() => {
+    createPlayer()
+    setIsPlaying(true)
+  }, [createPlayer])
 
   const postMessage = useCallback((action: string) => {
     if (iframeRef.current && playerReady.current) {
