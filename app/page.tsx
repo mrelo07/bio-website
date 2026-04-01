@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ParticlesBackground } from "@/components/particles-background"
 import { ProfileCard } from "@/components/profile-card"
 import { SocialLinks } from "@/components/social-links"
@@ -8,6 +9,7 @@ import { MusicPlayer } from "@/components/music-player"
 import {
   Github,
   Gamepad2,
+  LogIn,
 } from "lucide-react"
 
 const socialLinks = [
@@ -50,6 +52,15 @@ export default function Home() {
 
       {/* Main content */}
       <div className="relative z-10 flex w-full max-w-md flex-col items-center gap-8">
+        {/* Auth link */}
+        <Link
+          href="/auth/login"
+          className="absolute right-4 top-4 flex items-center gap-2 rounded-lg border border-border bg-card/60 px-3 py-1.5 text-sm text-muted-foreground backdrop-blur-md transition-all hover:border-neon/40 hover:text-foreground hover:shadow-[0_0_12px_hsla(270,70%,65%,0.15)]"
+        >
+          <LogIn className="h-4 w-4" />
+          <span>Login</span>
+        </Link>
+
         {/* Music toggle */}
         <MusicPlayer />
 
