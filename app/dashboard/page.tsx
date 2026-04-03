@@ -1,13 +1,23 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
+import { getSession } from "@/lib/auth"
 import { DashboardClient } from "./dashboard-client"
 
 export default async function DashboardPage() {
+  const session = await getSession()
+
+  if (!session) {
+    redirect("/auth/login")
+  }
+
   const supabase = await createClient()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Fetch user
+  const { data: user } = await supabase
+    .from("users")
+    .select("id, username")
+    .eq("id", session.userId)
+    .single()
 
   if (!user) {
     redirect("/auth/login")

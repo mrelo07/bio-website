@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -24,7 +23,10 @@ import {
   Loader2,
   User as UserIcon,
 } from "lucide-react"
-import type { User } from "@supabase/supabase-js"
+interface User {
+  id: string
+  username: string
+}
 
 interface Profile {
   id: string
@@ -84,29 +86,28 @@ export function DashboardClient({
   const [newLinkIcon, setNewLinkIcon] = useState("website")
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await fetch("/api/auth/logout", { method: "POST" })
     router.push("/")
     router.refresh()
   }
 
   const handleSaveProfile = async () => {
     setSaving(true)
-    const supabase = createClient()
 
-    const { error } = await supabase
-      .from("profiles")
-      .update({
+    const response = await fetch("/api/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         display_name: displayName || null,
         bio: bio || null,
         avatar_url: avatarUrl || null,
         discord_tag: discordTag || null,
-      })
-      .eq("id", user.id)
+      }),
+    })
 
     setSaving(false)
 
-    if (!error) {
+    if (response.ok) {
       router.refresh()
     }
   }
@@ -114,22 +115,21 @@ export function DashboardClient({
   const handleAddLink = async () => {
     if (!newLinkLabel || !newLinkUrl) return
 
-    const supabase = createClient()
-
-    const { data, error } = await supabase
-      .from("social_links")
-      .insert({
-        user_id: user.id,
+    const response = await fetch("/api/links", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         label: newLinkLabel,
         url: newLinkUrl,
         icon: newLinkIcon,
         sort_order: socialLinks.length,
-      })
-      .select()
-      .single()
+      }),
+    })
 
-    if (!error && data) {
-      setSocialLinks([...socialLinks, data])
+    const result = await response.json()
+
+    if (response.ok && result.data) {
+      setSocialLinks([...socialLinks, result.data])
       setNewLinkLabel("")
       setNewLinkUrl("")
       setNewLinkIcon("website")
@@ -137,14 +137,11 @@ export function DashboardClient({
   }
 
   const handleDeleteLink = async (linkId: string) => {
-    const supabase = createClient()
+    const response = await fetch(`/api/links?id=${linkId}`, {
+      method: "DELETE",
+    })
 
-    const { error } = await supabase
-      .from("social_links")
-      .delete()
-      .eq("id", linkId)
-
-    if (!error) {
+    if (response.ok) {
       setSocialLinks(socialLinks.filter((link) => link.id !== linkId))
     }
   }

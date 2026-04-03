@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -21,69 +20,27 @@ export default function SignUpPage() {
     setLoading(true)
     setError(null)
 
-    // Validate username (only lowercase letters, numbers, underscores)
-    const usernameRegex = /^[a-z0-9_]+$/
-    if (!usernameRegex.test(username)) {
-      setError("Username moze zawierac tylko male litery, cyfry i podkreslniki")
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || "Wystapil blad podczas rejestracji")
+        setLoading(false)
+        return
+      }
+
+      router.push("/dashboard")
+      router.refresh()
+    } catch {
+      setError("Wystapil blad podczas rejestracji")
       setLoading(false)
-      return
     }
-
-    if (username.length < 3 || username.length > 20) {
-      setError("Username musi miec od 3 do 20 znakow")
-      setLoading(false)
-      return
-    }
-
-    const supabase = createClient()
-
-    // Check if username is already taken
-    const { data: existingUser } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("username", username)
-      .single()
-
-    if (existingUser) {
-      setError("Ten username jest juz zajety")
-      setLoading(false)
-      return
-    }
-
-    // Generate a fake email from username (Supabase requires email)
-    const fakeEmail = `${username}@biolink.local`
-
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: fakeEmail,
-      password,
-      options: {
-        data: {
-          username,
-          display_name: username,
-        },
-      },
-    })
-
-    if (signUpError) {
-      setError(signUpError.message)
-      setLoading(false)
-      return
-    }
-
-    // Auto-login after signup
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: fakeEmail,
-      password,
-    })
-
-    if (signInError) {
-      setError(signInError.message)
-      setLoading(false)
-      return
-    }
-
-    router.push("/dashboard")
-    router.refresh()
   }
 
   return (

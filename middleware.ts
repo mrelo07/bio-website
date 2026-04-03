@@ -1,20 +1,27 @@
-import { updateSession } from '@/lib/supabase/middleware'
-import { type NextRequest } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
+
+const SESSION_COOKIE_NAME = "session_token"
 
 export async function middleware(request: NextRequest) {
-  return await updateSession(request)
+  const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)
+  const isLoggedIn = !!sessionCookie?.value
+
+  // Protect dashboard routes
+  if (request.nextUrl.pathname.startsWith('/dashboard') && !isLoggedIn) {
+    return NextResponse.redirect(new URL('/auth/login', request.url))
+  }
+
+  // Redirect logged-in users away from auth pages
+  if (request.nextUrl.pathname.startsWith('/auth') && isLoggedIn) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * Feel free to modify this pattern to include more paths.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/dashboard/:path*',
+    '/auth/:path*',
   ],
 }
