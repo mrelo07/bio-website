@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -22,6 +22,10 @@ export default function LoginPage() {
     setError(null)
 
     const supabase = createClient()
+    
+    // Convert username to email format
+    const email = `${username.toLowerCase()}@biolink.local`
+    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -58,13 +62,13 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-4 rounded-xl border border-border bg-card/60 p-6 backdrop-blur-md shadow-[0_0_30px_hsla(270,70%,65%,0.08)]">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="twoj@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="twoj_username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
                 className="border-border bg-secondary/50 focus:border-primary focus:ring-primary"
               />

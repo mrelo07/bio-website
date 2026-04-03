@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
 export default function SignUpPage() {
-  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [username, setUsername] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -51,13 +50,13 @@ export default function SignUpPage() {
       return
     }
 
-    const { error } = await supabase.auth.signUp({
-      email,
+    // Generate a fake email from username (Supabase requires email)
+    const fakeEmail = `${username}@biolink.local`
+
+    const { error: signUpError } = await supabase.auth.signUp({
+      email: fakeEmail,
       password,
       options: {
-        emailRedirectTo:
-          process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
-          `${window.location.origin}/dashboard`,
         data: {
           username,
           display_name: username,
@@ -65,13 +64,26 @@ export default function SignUpPage() {
       },
     })
 
-    if (error) {
-      setError(error.message)
+    if (signUpError) {
+      setError(signUpError.message)
       setLoading(false)
       return
     }
 
-    router.push("/auth/sign-up-success")
+    // Auto-login after signup
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: fakeEmail,
+      password,
+    })
+
+    if (signInError) {
+      setError(signInError.message)
+      setLoading(false)
+      return
+    }
+
+    router.push("/dashboard")
+    router.refresh()
   }
 
   return (
@@ -108,19 +120,6 @@ export default function SignUpPage() {
               <p className="text-xs text-muted-foreground">
                 Twoj profil bedzie dostepny pod /{username || "username"}
               </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="twoj@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="border-border bg-secondary/50 focus:border-primary focus:ring-primary"
-              />
             </div>
 
             <div className="space-y-2">
